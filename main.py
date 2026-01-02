@@ -22,7 +22,7 @@ load_dotenv()
 app = FastAPI(title="Ecom Events API")
 
 # -------------------------------------------------
-# Rate Limiter Setup (Step 8)
+# Rate Limiter Setup
 # -------------------------------------------------
 limiter = Limiter(key_func=get_remote_address)
 app.state.limiter = limiter
@@ -46,7 +46,7 @@ def build_conn_str():
 engine = create_engine(build_conn_str(), pool_pre_ping=True)
 
 # -------------------------------------------------
-# API Key Security (Step 7)
+# API Key Security
 # -------------------------------------------------
 def require_api_key(x_api_key: str = Header(None, alias="X-API-KEY")):
     expected = os.getenv("API_KEY")
@@ -61,7 +61,7 @@ def health():
     return {"status": "ok"}
 
 # -------------------------------------------------
-# Protected Dataset Endpoint (Step 6 + 7 + 8)
+# Protected Dataset Endpoint
 # -------------------------------------------------
 @app.get("/datasets/ecom_events", dependencies=[Depends(require_api_key)])
 @limiter.limit("30/minute")
